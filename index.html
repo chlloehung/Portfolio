@@ -9,7 +9,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Zen+Maru+Gothic:wght@400;500;700&family=DotGothic16&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Zen+Maru+Gothic:wght@400;500;700&family=DotGothic16&family=Marcellus&display=swap">
 <style>
 /* Layout: an archive table. Glossy specimens scattered across an ivory ground, each tagged with a number and its colour code; wide margins, small editorial type. */
 :root{
@@ -122,21 +122,26 @@ main{min-height:70vh}
 /* ---------- front page: an open bag of objects ---------- */
 .front{position:relative;padding-top:clamp(8px,2vw,24px)}
 .front-name{position:absolute;top:clamp(0px,1.5vw,20px);left:0;z-index:2;pointer-events:none}
-.front-name h1{font-family:var(--f-mono);font-weight:400;font-size:clamp(46px,8vw,112px);line-height:.9;letter-spacing:.01em;margin:0}
-.front-name .mono{display:block;margin-top:14px}
-.bag{display:block;width:min(100%,1000px);height:auto;margin:clamp(24px,5vw,56px) auto 0;overflow:visible}
+.front-name h1{font-family:"Marcellus","Trajan Pro",var(--f-display);font-weight:400;font-size:clamp(46px,7.2vw,100px);line-height:.94;letter-spacing:-.01em;text-transform:uppercase;margin:0;color:#111214}
+/* front page drops the misty colour field and the top bar: flat grey ground, like a scanner tray */
+body[data-view="home"]{background:#ECECEA}
+body[data-view="home"] .fluid{opacity:0}
+body[data-view="home"] .bar{display:none}
+body[data-view="home"] .grain{opacity:.22}
+.fluid{transition:opacity .8s}
+.bag{display:block;width:min(100%,960px,calc((100vh - 250px) * 1.47));min-width:min(100%,560px);height:auto;margin:clamp(40px,6vw,64px) auto 0;overflow:visible}
 .item{outline:none}
 .lift{transform-box:fill-box;transform-origin:center;transition:transform .5s var(--ease);filter:drop-shadow(0 10px 10px rgba(60,130,150,.22))}
 .item:hover .lift,.item:focus-visible .lift{transform:translateY(-8px) scale(1.06)}
 .scan{opacity:0;transition:opacity .2s}
 .item:hover .scan,.item:focus-visible .scan{opacity:1}
-.scan .box{fill:none;stroke:#2F9DC2;stroke-width:1.6}
-.scan .tab{fill:#2F9DC2}
-.scan text{font-family:"DotGothic16",ui-monospace,monospace;font-size:12px;fill:#fff;letter-spacing:.04em}
+.scan .box{fill:none;stroke:#3FA9DA;stroke-width:1.4}
+.scan .tab{fill:#4DB6E6}
+.scan text{font-family:"DotGothic16",ui-monospace,monospace;font-size:12px;fill:#0D2F3D;letter-spacing:.04em}
 .sweep{animation:sweep 8s linear infinite}
 @keyframes sweep{from{transform:translateX(170px)}to{transform:translateX(900px)}}
 .facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;text-align:center;margin-top:clamp(20px,3vw,40px)}
-.facts h2{font-family:var(--f-display);font-weight:500;font-size:14px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px}
+.facts h2{font-family:"Marcellus",var(--f-display);font-weight:400;font-size:15px;letter-spacing:.04em;color:#111214;text-transform:uppercase;margin:0 0 8px}
 .facts ul{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:14px;color:var(--ink-2)}
 .facts a{transition:color .3s}
 .facts a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
@@ -373,25 +378,25 @@ nav a{font-size:14px}
     <div class="front">
       <div class="front-name">
         <h1>Chloe<br>Hung</h1>
-        <span class="mono">UX/UI designer · hover the bag</span>
       </div>
-      <svg class="bag" viewBox="0 0 1000 640" role="group" aria-label="An open bag of objects. Each one opens part of the portfolio.">
+      <svg class="bag" viewBox="0 0 1000 680" role="group" aria-label="An open bag of objects. Each one opens part of the portfolio.">
         <defs>
-          <linearGradient id="bagG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D6F2F5"/><stop offset="1" stop-color="#86CCDA"/></linearGradient>
-          <clipPath id="mouth"><path d="M170 310Q500 40 830 310Q500 580 170 310Z"/></clipPath>
+          <radialGradient id="bagG" cx="50%" cy="50%" r="70%"><stop offset=".45" stop-color="#E6F6F8"/><stop offset=".8" stop-color="#7FC8D6"/><stop offset="1" stop-color="#1F8FA8"/></radialGradient>
+          <clipPath id="mouth"><path d="M150 320Q500 -10 850 320Q500 650 150 320Z"/></clipPath>
           <linearGradient id="sweepG" x1="0" x2="1"><stop offset="0" stop-color="#9BE3DA" stop-opacity="0"/><stop offset=".85" stop-color="#9BE3DA" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity=".95"/></linearGradient>
         </defs>
-        <path d="M360 104C360 8 640 8 640 104" fill="none" stroke="#5FB4C6" stroke-opacity=".5" stroke-width="26" stroke-linecap="round"/>
-        <path d="M368 96C372 26 628 26 632 96" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="5" stroke-linecap="round" filter="url(#soft)"/>
-        <g filter="url(#gel)"><rect x="90" y="96" width="820" height="440" rx="120" fill="url(#bagG)" fill-opacity=".55"/></g>
-        <rect x="90" y="96" width="820" height="440" rx="120" fill="none" stroke="#4FA9BD" stroke-opacity=".4" stroke-width="10"/>
-        <g fill="#6CC0D0" fill-opacity=".26" stroke="#4FA9BD" stroke-opacity=".3" stroke-width="2"><rect x="335" y="96" width="50" height="440"/><rect x="615" y="96" width="50" height="440"/></g>
-        <g fill="#4FA9BD" fill-opacity=".5"><rect x="74" y="288" width="26" height="46" rx="9"/><rect x="900" y="288" width="26" height="46" rx="9"/><rect x="342" y="84" width="36" height="30" rx="8"/><rect x="622" y="84" width="36" height="30" rx="8"/></g>
-        <path d="M170 310Q500 40 830 310Q500 580 170 310Z" style="fill:var(--paper)" fill-opacity=".72"/>
-        <path d="M170 310Q500 40 830 310Q500 580 170 310Z" fill="none" stroke="#4FA9BD" stroke-opacity=".55" stroke-width="12"/>
-        <path d="M170 310Q500 40 830 310Q500 580 170 310Z" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="2 6" opacity=".9"/>
-        <path d="M384 534C384 636 616 636 616 534" fill="none" stroke="#5FB4C6" stroke-opacity=".45" stroke-width="22" stroke-linecap="round"/>
-        <g clip-path="url(#mouth)" pointer-events="none"><rect class="sweep" x="-70" y="40" width="70" height="560" fill="url(#sweepG)"/></g>
+        <path d="M360 76C360 -22 640 -22 640 76" fill="none" stroke="#2A9AB3" stroke-opacity=".45" stroke-width="26" stroke-linecap="round"/>
+        <path d="M368 68C372 -6 628 -6 632 68" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="5" stroke-linecap="round" filter="url(#soft)"/>
+        <g filter="url(#gel)"><rect x="80" y="70" width="840" height="500" rx="140" fill="url(#bagG)" fill-opacity=".7"/></g>
+        <rect x="80" y="70" width="840" height="500" rx="140" fill="none" stroke="#167E97" stroke-opacity=".55" stroke-width="12"/>
+        <rect x="95" y="85" width="810" height="470" rx="126" fill="none" stroke="#2A9AB3" stroke-opacity=".25" stroke-width="3"/>
+        <g fill="none" stroke-linecap="round"><path d="M360 74C320 260 300 440 420 568M640 74C680 260 700 440 580 568" stroke="#2A9AB3" stroke-opacity=".3" stroke-width="54"/><path d="M360 74C320 260 300 440 420 568M640 74C680 260 700 440 580 568" stroke="#167E97" stroke-opacity=".35" stroke-width="2" stroke-dasharray="6 6"/></g>
+        <g fill="#167E97" fill-opacity=".6"><rect x="64" y="296" width="26" height="48" rx="9"/><rect x="910" y="296" width="26" height="48" rx="9"/><rect x="342" y="58" width="36" height="30" rx="8"/><rect x="622" y="58" width="36" height="30" rx="8"/></g>
+        <path d="M150 320Q500 -10 850 320Q500 650 150 320Z" fill="#F1F5F6" fill-opacity=".92"/>
+        <path d="M150 320Q500 -10 850 320Q500 650 150 320Z" fill="none" stroke="#2A9AB3" stroke-opacity=".7" stroke-width="16"/>
+        <path d="M150 320Q500 -10 850 320Q500 650 150 320Z" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="2 6" opacity=".9"/>
+        <path d="M384 568C384 670 616 670 616 568" fill="none" stroke="#2A9AB3" stroke-opacity=".45" stroke-width="22" stroke-linecap="round"/>
+        <g clip-path="url(#mouth)" pointer-events="none"><rect class="sweep" x="-70" y="0" width="70" height="680" fill="url(#sweepG)"/></g>
         <g id="bag-items"></g>
       </svg>
       <div class="facts">
@@ -500,7 +505,9 @@ const COLORS = { // hi, base, deep
   lemon:["#FFFBE0","#F5E57A","#E8C94A"], blush:["#FFF0F4","#F4BACB","#E68DA8"],
   aqua:["#EFFFFC","#9BE3DA","#4FC4BC"], mist:["#F3F8FF","#BCD3EE","#7FA6D6"],
   sage:["#F4FBF0","#BFD8B4","#84AE78"], peach:["#FFF5EC","#F8C9A6","#EE9E70"],
-  iris:["#EEF1FF","#A9B6EA","#6C7FC9"]
+  iris:["#EEF1FF","#A9B6EA","#6C7FC9"],
+  /* x-ray tints for the objects in the front-page bag */
+  xmag:["#FFD1EC","#E85BB4","#B3127F"], xvio:["#E2DCFF","#8E7EEA","#4A38B8"], xteal:["#CFF3F8","#45AFC7","#0D6880"]
 };
 (function grads(){
   let s="";
@@ -552,14 +559,14 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 
 /* ---------- bag: objects laid inside the open bag ---------- */
 const ITEMS=[ // x,y = centre in the bag's 1000x640 drawing; s = size; r = tilt
-  {kind:"coin",color:"lemon",x:300,y:310,s:100,r:-8,label:"Missing Wealth · case 01",href:"#case-missing-wealth"},
-  {kind:"phone",color:"blush",x:405,y:262,s:120,r:6,label:"St. Joseph's · case 02",href:"#case-st-josephs"},
-  {kind:"fish",color:"aqua",x:530,y:236,s:115,r:-4,label:"DFO · case 03",href:"#case-dfo"},
-  {kind:"vinyl",color:"iris",x:660,y:282,s:108,r:0,label:"Music",href:"#music"},
-  {kind:"camera",color:"sage",x:500,y:366,s:100,r:-6,label:"Photography",href:"#photos"},
-  {kind:"fuji",color:"mist",x:618,y:384,s:92,r:4,label:"Japan",href:"#japan"},
-  {kind:"cat",color:"peach",x:738,y:318,s:90,r:0,label:"The cat",href:"#cat"},
-  {kind:"doc",color:"mist",x:380,y:384,s:86,r:-10,label:"Resume",href:"#resume"}
+  {kind:"coin",color:"xvio",x:470,y:255,s:115,r:-8,label:"Missing Wealth · case 01",href:"#case-missing-wealth"},
+  {kind:"phone",color:"xmag",x:340,y:320,s:200,r:0,label:"St. Joseph's · case 02",href:"#case-st-josephs"},
+  {kind:"fish",color:"xteal",x:600,y:215,s:130,r:-4,label:"DFO · case 03",href:"#case-dfo"},
+  {kind:"vinyl",color:"xvio",x:712,y:268,s:105,r:0,label:"Music",href:"#music"},
+  {kind:"camera",color:"xmag",x:455,y:390,s:105,r:-6,label:"Photography",href:"#photos"},
+  {kind:"fuji",color:"xteal",x:665,y:395,s:90,r:4,label:"Japan",href:"#japan"},
+  {kind:"cat",color:"xvio",x:792,y:322,s:84,r:0,label:"The cat",href:"#cat"},
+  {kind:"doc",color:"xmag",x:562,y:388,s:88,r:-10,label:"Resume",href:"#resume"}
 ];
 document.getElementById("bag-items").innerHTML=ITEMS.map(it=>{
   const h=it.s/2, w=Math.round(it.label.length*7.4+14);
@@ -698,6 +705,7 @@ function route(){
   else if(COLL.includes(h)){ v="about"; anchor=h; }
   else if(h.startsWith("case-") && DATA.projects.some(p=>"case-"+p.id===h)){ v="case"; renderCase(h.slice(5)); }
   views.forEach(el=>el.classList.toggle("on",el.id==="v-"+v));
+  document.body.dataset.view=v;
   document.querySelectorAll("[data-nav]").forEach(a=>{
     const on=a.dataset.nav===v||(v==="case"&&a.dataset.nav==="work");
     on?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current");
