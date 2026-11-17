@@ -119,6 +119,32 @@ main{min-height:70vh}
 .home-note p{margin:0;max-width:30ch}
 .home-note p:last-child{text-align:right}
 
+/* ---------- front page: an open bag of objects ---------- */
+.front{position:relative;padding-top:clamp(8px,2vw,24px)}
+.front-name{position:absolute;top:clamp(0px,1.5vw,20px);left:0;z-index:2;pointer-events:none}
+.front-name h1{font-family:var(--f-mono);font-weight:400;font-size:clamp(46px,8vw,112px);line-height:.9;letter-spacing:.01em;margin:0}
+.front-name .mono{display:block;margin-top:14px}
+.bag{display:block;width:min(100%,1000px);height:auto;margin:clamp(24px,5vw,56px) auto 0;overflow:visible}
+.item{outline:none}
+.lift{transform-box:fill-box;transform-origin:center;transition:transform .5s var(--ease);filter:drop-shadow(0 10px 10px rgba(60,130,150,.22))}
+.item:hover .lift,.item:focus-visible .lift{transform:translateY(-8px) scale(1.06)}
+.scan{opacity:0;transition:opacity .2s}
+.item:hover .scan,.item:focus-visible .scan{opacity:1}
+.scan .box{fill:none;stroke:#2F9DC2;stroke-width:1.6}
+.scan .tab{fill:#2F9DC2}
+.scan text{font-family:"DotGothic16",ui-monospace,monospace;font-size:12px;fill:#fff;letter-spacing:.04em}
+.sweep{animation:sweep 8s linear infinite}
+@keyframes sweep{from{transform:translateX(170px)}to{transform:translateX(900px)}}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;text-align:center;margin-top:clamp(20px,3vw,40px)}
+.facts h2{font-family:var(--f-display);font-weight:500;font-size:14px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px}
+.facts ul{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:14px;color:var(--ink-2)}
+.facts a{transition:color .3s}
+.facts a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+@media (max-width:700px){
+  .front-name{position:static}
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:28px}
+}
+
 /* ---------- page heads ---------- */
 .page-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px 64px;align-items:end;padding-block:32px 56px;border-bottom:1px solid var(--line)}
 .page-head h2{font-size:var(--s4);margin-top:12px}
@@ -344,26 +370,35 @@ nav a{font-size:14px}
 <main id="main">
   <!-- 01 HOME -->
   <section class="view wrap" id="v-home" aria-label="Index">
-    <div class="home">
-      <div class="hero">
-        <div class="intro">
-          <h1>Chloe<br>Hung</h1>
-          <span class="role">UX/UI designer</span>
-          <p>Interfaces I have designed, objects I keep, and the music, places and photographs that shape how I see. Open any object to look inside.</p>
-        </div>
-        <div class="hero-folder">
-          <a class="folder par" style="--d:-14" href="#work" aria-label="Open selected work">
-            <div class="bob" style="--dur:9s;--r:-1deg" id="folder-art"></div>
-          </a>
-          <div class="folder-tip">↑ selected_work/ — 3 items</div>
-        </div>
+    <div class="front">
+      <div class="front-name">
+        <h1>Chloe<br>Hung</h1>
+        <span class="mono">UX/UI designer · hover the bag</span>
       </div>
-      <div class="index">
-        <ul class="specimens" id="specimens"></ul>
-        <div class="home-note">
-          <p><span class="mono">INDEX 01–08</span><br>Eight objects. Three hold case studies, four hold things I love, one holds my resume.</p>
-          <p>Every object is tagged with<br>its number and colour code.</p>
-        </div>
+      <svg class="bag" viewBox="0 0 1000 640" role="group" aria-label="An open bag of objects. Each one opens part of the portfolio.">
+        <defs>
+          <linearGradient id="bagG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D6F2F5"/><stop offset="1" stop-color="#86CCDA"/></linearGradient>
+          <clipPath id="mouth"><path d="M170 310Q500 40 830 310Q500 580 170 310Z"/></clipPath>
+          <linearGradient id="sweepG" x1="0" x2="1"><stop offset="0" stop-color="#9BE3DA" stop-opacity="0"/><stop offset=".85" stop-color="#9BE3DA" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity=".95"/></linearGradient>
+        </defs>
+        <path d="M360 104C360 8 640 8 640 104" fill="none" stroke="#5FB4C6" stroke-opacity=".5" stroke-width="26" stroke-linecap="round"/>
+        <path d="M368 96C372 26 628 26 632 96" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="5" stroke-linecap="round" filter="url(#soft)"/>
+        <g filter="url(#gel)"><rect x="90" y="96" width="820" height="440" rx="120" fill="url(#bagG)" fill-opacity=".55"/></g>
+        <rect x="90" y="96" width="820" height="440" rx="120" fill="none" stroke="#4FA9BD" stroke-opacity=".4" stroke-width="10"/>
+        <g fill="#6CC0D0" fill-opacity=".26" stroke="#4FA9BD" stroke-opacity=".3" stroke-width="2"><rect x="335" y="96" width="50" height="440"/><rect x="615" y="96" width="50" height="440"/></g>
+        <g fill="#4FA9BD" fill-opacity=".5"><rect x="74" y="288" width="26" height="46" rx="9"/><rect x="900" y="288" width="26" height="46" rx="9"/><rect x="342" y="84" width="36" height="30" rx="8"/><rect x="622" y="84" width="36" height="30" rx="8"/></g>
+        <path d="M170 310Q500 40 830 310Q500 580 170 310Z" style="fill:var(--paper)" fill-opacity=".72"/>
+        <path d="M170 310Q500 40 830 310Q500 580 170 310Z" fill="none" stroke="#4FA9BD" stroke-opacity=".55" stroke-width="12"/>
+        <path d="M170 310Q500 40 830 310Q500 580 170 310Z" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="2 6" opacity=".9"/>
+        <path d="M384 534C384 636 616 636 616 534" fill="none" stroke="#5FB4C6" stroke-opacity=".45" stroke-width="22" stroke-linecap="round"/>
+        <g clip-path="url(#mouth)" pointer-events="none"><rect class="sweep" x="-70" y="40" width="70" height="560" fill="url(#sweepG)"/></g>
+        <g id="bag-items"></g>
+      </svg>
+      <div class="facts">
+        <div><h2>Work</h2><ul><li><a href="#case-missing-wealth">Missing Wealth</a></li><li><a href="#case-st-josephs">St. Joseph's</a></li><li><a href="#case-dfo">DFO</a></li></ul></div>
+        <div><h2>Collection</h2><ul><li><a href="#music">Music</a></li><li><a href="#photos">Photography</a></li><li><a href="#japan">Japan</a></li><li><a href="#cat">The cat</a></li></ul></div>
+        <div><h2>Skills</h2><ul><li>User research</li><li>Interaction design</li><li>Prototyping</li></ul></div>
+        <div><h2>Other</h2><ul><li><a href="#resume">Resume</a></li><li>Jazz listener</li><li>Film photographer</li></ul></div>
       </div>
     </div>
   </section>
@@ -515,42 +550,28 @@ const svg=(kind,color,extra="")=>`<svg class="o" viewBox="0 0 120 120" aria-hidd
 const smp=on=>on?`<span class="smp">sample</span>`:"";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-/* ---------- folder ---------- */
-document.getElementById("folder-art").innerHTML=`
-<svg viewBox="0 0 420 340" aria-hidden="true" focusable="false">
-  ${gel(`<path d="M20 74Q20 52 42 52H140Q153 52 161 64L170 78H380Q402 78 402 100V300Q402 322 380 322H42Q20 322 20 300Z"/>`,"mist",.95)}
-  <g filter="url(#gel)" fill-opacity=".95">
-    <rect x="48" y="70" width="300" height="190" rx="14" fill="url(#g-peach)" transform="rotate(-5 198 165)"/>
-    <rect x="72" y="88" width="300" height="190" rx="14" fill="url(#g-aqua)" transform="rotate(3 222 183)"/>
-  </g>
-  <svg class="mini" x="54" y="24" width="120" height="120" viewBox="0 0 120 120" overflow="visible">${OBJ.fish("aqua")}</svg>
-  <svg class="mini" x="168" y="8" width="118" height="118" viewBox="0 0 120 120" overflow="visible">${OBJ.phone("blush")}</svg>
-  <svg class="mini" x="268" y="36" width="104" height="104" viewBox="0 0 120 120" overflow="visible">${OBJ.coin("lemon")}</svg>
-  <g class="front">
-    <g filter="url(#gel)"><path d="M12 146Q12 124 34 124H388Q410 124 407 146L394 304Q392 326 370 326H50Q28 326 26 304Z" fill="url(#g-lemon)" fill-opacity=".82"/></g>
-    <path d="M40 140H380" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8" filter="url(#soft)"/>
-    <text x="44" y="300" font-family="DotGothic16, monospace" font-size="13" fill="#8A7420" opacity=".75">selected_work</text>
-  </g>
-</svg>`;
-
-/* ---------- specimens ---------- */
-const SPECS=[
-  {kind:"coin",color:"lemon",label:"Missing Wealth",sub:"case study",href:"#case-missing-wealth"},
-  {kind:"phone",color:"blush",label:"St. Joseph's",sub:"case study",href:"#case-st-josephs"},
-  {kind:"fish",color:"aqua",label:"DFO",sub:"case study",href:"#case-dfo"},
-  {kind:"vinyl",color:"iris",label:"Music",sub:"collection",href:"#music"},
-  {kind:"camera",color:"sage",label:"Photography",sub:"collection",href:"#photos"},
-  {kind:"fuji",color:"mist",label:"Japan",sub:"collection",href:"#japan"},
-  {kind:"cat",color:"peach",label:"The cat",sub:"collection",href:"#cat"},
-  {kind:"doc",color:"mist",label:"Resume",sub:"one page",href:"#resume"}
+/* ---------- bag: objects laid inside the open bag ---------- */
+const ITEMS=[ // x,y = centre in the bag's 1000x640 drawing; s = size; r = tilt
+  {kind:"coin",color:"lemon",x:300,y:310,s:100,r:-8,label:"Missing Wealth · case 01",href:"#case-missing-wealth"},
+  {kind:"phone",color:"blush",x:405,y:262,s:120,r:6,label:"St. Joseph's · case 02",href:"#case-st-josephs"},
+  {kind:"fish",color:"aqua",x:530,y:236,s:115,r:-4,label:"DFO · case 03",href:"#case-dfo"},
+  {kind:"vinyl",color:"iris",x:660,y:282,s:108,r:0,label:"Music",href:"#music"},
+  {kind:"camera",color:"sage",x:500,y:366,s:100,r:-6,label:"Photography",href:"#photos"},
+  {kind:"fuji",color:"mist",x:618,y:384,s:92,r:4,label:"Japan",href:"#japan"},
+  {kind:"cat",color:"peach",x:738,y:318,s:90,r:0,label:"The cat",href:"#cat"},
+  {kind:"doc",color:"mist",x:380,y:384,s:86,r:-10,label:"Resume",href:"#resume"}
 ];
-document.getElementById("specimens").innerHTML=SPECS.map((s,i)=>`
-  <li><a class="spec" href="${s.href}" aria-label="${s.label}, ${s.sub}">
-    <span class="hex">${COLORS[s.color][1].toLowerCase()}</span>
-    <div class="art par" style="--d:${[22,-16,30,-24,18,-30,26,-20][i]}"><div class="bob" style="--dur:${6+i%4}s;--del:-${i*.9}s;--r:${[-4,3,-2,5,-3,2,-5,4][i]}deg">${svg(s.kind,s.color)}</div></div>
-    <span class="num">${i+1}</span>
-    <span class="lbl">${s.label}<i>${s.sub}</i></span>
-  </a></li>`).join("");
+document.getElementById("bag-items").innerHTML=ITEMS.map(it=>{
+  const h=it.s/2, w=Math.round(it.label.length*7.4+14);
+  return `<a class="item" href="${it.href}" aria-label="${esc(it.label)}">
+    <g transform="translate(${it.x-h} ${it.y-h})">
+      <g class="lift"><g transform="rotate(${it.r} ${h} ${h})"><svg width="${it.s}" height="${it.s}" viewBox="0 0 120 120" overflow="visible">${OBJ[it.kind](it.color)}</svg></g></g>
+      <g class="scan" aria-hidden="true">
+        <rect class="box" x="-8" y="-8" width="${it.s+16}" height="${it.s+16}"/>
+        <rect class="tab" x="-8" y="-27" width="${w}" height="19"/>
+        <text x="-1" y="-13">${esc(it.label.toUpperCase())}</text>
+      </g>
+    </g></a>`;}).join("");
 
 /* ---------- work ---------- */
 document.getElementById("projects").innerHTML=DATA.projects.map((p,i)=>`
