@@ -126,7 +126,11 @@ main{min-height:70vh}
 /* front page drops the misty colour field and the top bar: flat grey ground, like a scanner tray */
 body[data-view="home"]{background:#ECECEA}
 body[data-view="home"] .fluid{opacity:0}
-body[data-view="home"] .bar{display:none}
+body[data-view="home"] .bar{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+body[data-view="home"] .bar .wrap{justify-content:flex-end}
+body[data-view="home"] .brand{display:none}
+body[data-view="home"] nav a{color:#4A4D52}
+body[data-view="home"] nav a:hover,body[data-view="home"] nav a[aria-current="page"]{color:#111214}
 body[data-view="home"] .grain{opacity:.22}
 .fluid{transition:opacity .8s}
 .bag{display:block;width:min(100%,960px,calc((100vh - 250px) * 1.47));min-width:min(100%,560px);height:auto;margin:clamp(40px,6vw,64px) auto 0;overflow:visible}
