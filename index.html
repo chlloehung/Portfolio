@@ -134,7 +134,14 @@ body[data-view="home"] nav a:hover,body[data-view="home"] nav a[aria-current="pa
 body[data-view="home"] .grain{opacity:.22}
 .fluid{transition:opacity .8s}
 .bag{display:block;width:min(100%,960px,calc((100vh - 250px) * 1.47));min-width:min(100%,560px);height:auto;margin:clamp(40px,6vw,64px) auto 0;overflow:visible}
-.item{outline:none}
+.bag .item{outline:none;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}
+.bag .item.dragging{cursor:grabbing}
+.item.dragging .lift{transform:scale(1.12) rotate(-4deg);filter:drop-shadow(0 22px 18px rgba(40,90,110,.3));transition:transform .2s var(--ease)}
+.item.settle .pos{transition:transform .6s var(--ease)}
+.bag-tools{display:flex;justify-content:center;min-height:28px;margin-top:4px}
+.bag-tools .mono{color:var(--ink-3)}
+.tidy{font-family:var(--f-mono);font-size:12px;color:#0D2F3D;background:#CFEAF3;border:1px solid #8FCDE0;border-radius:99px;padding:4px 14px}
+.tidy:hover{background:#B9E1EE}
 .lift{transform-box:fill-box;transform-origin:center;transition:transform .5s var(--ease);filter:drop-shadow(0 10px 10px rgba(60,130,150,.22))}
 .item:hover .lift,.item:focus-visible .lift{transform:translateY(-8px) scale(1.06)}
 .scan{opacity:0;transition:opacity .2s}
@@ -403,6 +410,10 @@ nav a{font-size:14px}
         <g clip-path="url(#mouth)" pointer-events="none"><rect class="sweep" x="-70" y="0" width="70" height="680" fill="url(#sweepG)"/></g>
         <g id="bag-items"></g>
       </svg>
+      <div class="bag-tools">
+        <span class="mono" id="bag-hint">Drag the objects around · click one to open it</span>
+        <button class="tidy" type="button" id="tidy" hidden>Put everything back</button>
+      </div>
       <div class="facts">
         <div><h2>Work</h2><ul><li><a href="#case-missing-wealth">Missing Wealth</a></li><li><a href="#case-st-josephs">St. Joseph's</a></li><li><a href="#case-dfo">DFO</a></li></ul></div>
         <div><h2>Collection</h2><ul><li><a href="#music">Music</a></li><li><a href="#photos">Photography</a></li><li><a href="#japan">Japan</a></li><li><a href="#cat">The cat</a></li></ul></div>
@@ -575,7 +586,7 @@ const ITEMS=[ // x,y = centre in the bag's 1000x640 drawing; s = size; r = tilt
 document.getElementById("bag-items").innerHTML=ITEMS.map(it=>{
   const h=it.s/2, w=Math.round(it.label.length*7.4+14);
   return `<a class="item" href="${it.href}" aria-label="${esc(it.label)}">
-    <g transform="translate(${it.x-h} ${it.y-h})">
+    <g class="pos" transform="translate(${it.x-h} ${it.y-h})">
       <g class="lift"><g transform="rotate(${it.r} ${h} ${h})"><svg width="${it.s}" height="${it.s}" viewBox="0 0 120 120" overflow="visible">${OBJ[it.kind](it.color)}</svg></g></g>
       <g class="scan" aria-hidden="true">
         <rect class="box" x="-8" y="-8" width="${it.s+16}" height="${it.s+16}"/>
@@ -583,6 +594,41 @@ document.getElementById("bag-items").innerHTML=ITEMS.map(it=>{
         <text x="-1" y="-13">${esc(it.label.toUpperCase())}</text>
       </g>
     </g></a>`;}).join("");
+
+/* drag the objects around the page; a short click still opens the link */
+(function bagDrag(){
+  const svgEl=document.querySelector(".bag"), links=[...document.querySelectorAll("#bag-items .item")];
+  const hint=document.getElementById("bag-hint"), tidy=document.getElementById("tidy");
+  const KEY="bag-positions-v1", home=ITEMS.map(it=>({x:it.x,y:it.y}));
+  let pos=home.map(p=>({...p}));
+  try{const saved=JSON.parse(localStorage.getItem(KEY)||"null"); if(Array.isArray(saved)&&saved.length===ITEMS.length) pos=saved;}catch(e){}
+  const place=i=>{const h=ITEMS[i].s/2; links[i].querySelector(".pos").setAttribute("transform",`translate(${pos[i].x-h} ${pos[i].y-h})`);};
+  const moved=()=>pos.some((p,i)=>Math.abs(p.x-home[i].x)>1||Math.abs(p.y-home[i].y)>1);
+  const sync=()=>{const m=moved(); tidy.hidden=!m; hint.hidden=m;};
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(pos));}catch(e){}};
+  const toSvg=e=>new DOMPoint(e.clientX,e.clientY).matrixTransform(svgEl.getScreenCTM().inverse());
+  pos.forEach((_,i)=>place(i)); sync();
+  let d=null;
+  links.forEach((a,i)=>{
+    a.addEventListener("dragstart",e=>e.preventDefault());
+    a.addEventListener("pointerdown",e=>{
+      if(e.button!==0) return;
+      const p=toSvg(e); d={i,sx:p.x,sy:p.y,ox:pos[i].x,oy:pos[i].y,on:false};
+      if(a.nextSibling) a.parentNode.appendChild(a); // bring to front before capturing; moving it later drops the capture
+      a.setPointerCapture(e.pointerId);
+    });
+    a.addEventListener("pointermove",e=>{
+      if(!d||d.i!==i) return;
+      const p=toSvg(e), dx=p.x-d.sx, dy=p.y-d.sy;
+      if(!d.on){ if(Math.hypot(dx,dy)<6) return; d.on=true; a.classList.add("dragging"); }
+      pos[i]={x:Math.round(d.ox+dx),y:Math.round(d.oy+dy)}; place(i);
+    });
+    const end=()=>{ if(!d||d.i!==i) return; if(d.on){ a._dragEnd=performance.now(); save(); sync(); } a.classList.remove("dragging"); d=null; };
+    a.addEventListener("pointerup",end); a.addEventListener("pointercancel",end); a.addEventListener("lostpointercapture",end);
+    a.addEventListener("click",e=>{ if(a._dragEnd&&performance.now()-a._dragEnd<400){ e.preventDefault(); a._dragEnd=0; } });
+  });
+  tidy.addEventListener("click",()=>{ pos=home.map(p=>({...p})); links.forEach(a=>a.classList.add("settle")); pos.forEach((_,i)=>place(i)); save(); sync(); setTimeout(()=>links.forEach(a=>a.classList.remove("settle")),700); });
+})();
 
 /* ---------- work ---------- */
 document.getElementById("projects").innerHTML=DATA.projects.map((p,i)=>`
