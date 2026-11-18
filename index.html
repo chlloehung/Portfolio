@@ -42,7 +42,7 @@ a{color:inherit;text-decoration:none}
 
 /* ---------- header ---------- */
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;padding-block:18px;background:color-mix(in srgb,var(--bg) 38%,transparent);-webkit-backdrop-filter:blur(16px) saturate(1.1);backdrop-filter:blur(16px) saturate(1.1);margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding-inline:max(16px,env(safe-area-inset-left,0px))}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;padding-block:18px;background:color-mix(in srgb,var(--bg) 86%,transparent);margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding-inline:max(16px,env(safe-area-inset-left,0px))}
 
 /* ---------- fluid pigment-mist background ---------- */
 .fluid{position:fixed;inset:0;width:100%;height:100%;z-index:-2;display:block;pointer-events:none;
@@ -51,11 +51,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     radial-gradient(45% 30% at 30% 45%,color-mix(in srgb,var(--lemon) 55%,transparent),transparent 70%),
     radial-gradient(35% 40% at 15% 85%,color-mix(in srgb,var(--sage) 70%,transparent),transparent 70%),
     radial-gradient(40% 35% at 55% 60%,color-mix(in srgb,var(--mist) 60%,transparent),transparent 70%),var(--bg);
-  filter:blur(var(--fluid-blur,0px))}
-.grain{position:fixed;inset:-50%;z-index:-1;pointer-events:none;opacity:.4;mix-blend-mode:multiply;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .42 0 0 0 0 .4 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:grain 1.2s steps(6) infinite}
-@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+  image-rendering:auto}
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.32;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .42 0 0 0 0 .4 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 .bar .wrap{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .brand{font-family:var(--f-display);font-size:22px;font-weight:400;letter-spacing:.01em}
 .brand small{font-family:var(--f-mono);font-size:10px;color:var(--ink-2);margin-left:8px;letter-spacing:.08em}
@@ -69,12 +67,12 @@ nav a[aria-current="page"]::after{content:"";width:5px;height:5px;border-radius:
 main{min-height:70vh}
 .view{display:none;padding-block:24px 96px}
 .view.on{display:block;animation:viewIn .8s var(--ease) both}
-@keyframes viewIn{from{opacity:.25;filter:blur(6px);transform:translateY(14px)}to{opacity:1;filter:none;transform:none}}
+@keyframes viewIn{from{opacity:.25;transform:translateY(14px)}to{opacity:1;transform:none}}
 
 /* ---------- objects ---------- */
 .o{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 18px 18px color-mix(in srgb,var(--c,#bbb) 45%,transparent))}
-.par{translate:calc(var(--mx,0) * var(--d,16) * 1px) calc(var(--my,0) * var(--d,16) * 1px);transition:translate 1.1s var(--ease)}
-.bob{animation:bob var(--dur,7s) ease-in-out infinite;animation-delay:var(--del,0s)}
+.par{will-change:translate}
+.bob{animation:bob var(--dur,7s) ease-in-out infinite;animation-delay:var(--del,0s);will-change:transform}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-9px) rotate(calc(var(--r,0deg) + 3deg))}}
 .halo{position:relative}
 .halo::before{content:"";position:absolute;inset:-12%;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--c) 70%,transparent),transparent);opacity:var(--halo);filter:blur(18px);z-index:-1}
@@ -126,31 +124,33 @@ main{min-height:70vh}
 /* front page drops the misty colour field and the top bar: flat grey ground, like a scanner tray */
 body[data-view="home"]{background:#ECECEA}
 body[data-view="home"] .fluid{opacity:0}
-body[data-view="home"] .bar{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+body[data-view="home"] .bar{background:transparent}
 body[data-view="home"] .bar .wrap{justify-content:flex-end}
 body[data-view="home"] .brand{display:none}
 body[data-view="home"] nav a{color:#4A4D52}
 body[data-view="home"] nav a:hover,body[data-view="home"] nav a[aria-current="page"]{color:#111214}
 body[data-view="home"] .grain{opacity:.22}
 .fluid{transition:opacity .8s}
-.bag{display:block;width:min(100%,960px,calc((100vh - 250px) * 1.47));min-width:min(100%,560px);height:auto;margin:clamp(40px,6vw,64px) auto 0;overflow:visible}
-.bag .item{outline:none;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}
-.bag .item.dragging{cursor:grabbing}
-.item.dragging .lift{transform:scale(1.12) rotate(-4deg);filter:drop-shadow(0 22px 18px rgba(40,90,110,.3));transition:transform .2s var(--ease)}
-.item.settle .pos{transition:transform .6s var(--ease)}
+.bag-wrap{position:relative;width:min(100%,960px,calc((100vh - 250px) * 1.47));min-width:min(100%,560px);aspect-ratio:1000/680;margin:clamp(40px,6vw,64px) auto 0}
+.bag,.bag-sweep{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.bag-sweep{pointer-events:none}
+.sweep{animation:sweep 8s linear infinite;will-change:transform}
+@keyframes sweep{from{transform:translateX(170px)}to{transform:translateX(900px)}}
+.bag-items{position:absolute;inset:0}
+.bag-items .item{position:absolute;aspect-ratio:1;transform:translate(-50%,-50%);will-change:transform;outline:none;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.bag-items .item.dragging{cursor:grabbing}
+.bag-items .item.settle{transition:left .6s var(--ease),top .6s var(--ease)}
+.lift{display:block;width:100%;height:100%;transform:rotate(var(--r,0deg));transition:transform .45s var(--ease);will-change:transform}
+.lift svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 10px 10px rgba(60,130,150,.22))}
+.item:hover .lift,.item:focus-visible .lift{transform:translateY(-8px) scale(1.06) rotate(var(--r,0deg))}
+.item.dragging .lift{transform:scale(1.12) rotate(calc(var(--r,0deg) - 4deg));transition-duration:.2s}
+.scan{position:absolute;inset:-8px;border:1.4px solid #3FA9DA;opacity:0;transition:opacity .2s;pointer-events:none}
+.item:hover .scan,.item:focus-visible .scan,.item.dragging .scan{opacity:1}
+.scan .tag{position:absolute;left:-1.4px;bottom:100%;background:#4DB6E6;color:#0D2F3D;font-family:"DotGothic16",ui-monospace,monospace;font-size:12px;line-height:1.5;letter-spacing:.04em;padding:0 6px;white-space:nowrap}
 .bag-tools{display:flex;justify-content:center;min-height:28px;margin-top:4px}
 .bag-tools .mono{color:var(--ink-3)}
 .tidy{font-family:var(--f-mono);font-size:12px;color:#0D2F3D;background:#CFEAF3;border:1px solid #8FCDE0;border-radius:99px;padding:4px 14px}
 .tidy:hover{background:#B9E1EE}
-.lift{transform-box:fill-box;transform-origin:center;transition:transform .5s var(--ease);filter:drop-shadow(0 10px 10px rgba(60,130,150,.22))}
-.item:hover .lift,.item:focus-visible .lift{transform:translateY(-8px) scale(1.06)}
-.scan{opacity:0;transition:opacity .2s}
-.item:hover .scan,.item:focus-visible .scan{opacity:1}
-.scan .box{fill:none;stroke:#3FA9DA;stroke-width:1.4}
-.scan .tab{fill:#4DB6E6}
-.scan text{font-family:"DotGothic16",ui-monospace,monospace;font-size:12px;fill:#0D2F3D;letter-spacing:.04em}
-.sweep{animation:sweep 8s linear infinite}
-@keyframes sweep{from{transform:translateX(170px)}to{transform:translateX(900px)}}
 .facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;text-align:center;margin-top:clamp(20px,3vw,40px)}
 .facts h2{font-family:"Marcellus",var(--f-display);font-weight:400;font-size:15px;letter-spacing:.04em;color:#111214;text-transform:uppercase;margin:0 0 8px}
 .facts ul{list-style:none;margin:0;padding:0;display:grid;gap:2px;font-size:14px;color:var(--ink-2)}
@@ -347,7 +347,6 @@ nav a{font-size:14px}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}
-  .par{translate:none}
 }
 </style>
 
@@ -390,6 +389,7 @@ nav a{font-size:14px}
       <div class="front-name">
         <h1>Chloe<br>Hung</h1>
       </div>
+      <div class="bag-wrap" id="bag-wrap">
       <svg class="bag" viewBox="0 0 1000 680" role="group" aria-label="An open bag of objects. Each one opens part of the portfolio.">
         <defs>
           <radialGradient id="bagG" cx="50%" cy="50%" r="70%"><stop offset=".45" stop-color="#E6F6F8"/><stop offset=".8" stop-color="#7FC8D6"/><stop offset="1" stop-color="#1F8FA8"/></radialGradient>
@@ -407,9 +407,10 @@ nav a{font-size:14px}
         <path d="M150 320Q500 -10 850 320Q500 650 150 320Z" fill="none" stroke="#2A9AB3" stroke-opacity=".7" stroke-width="16"/>
         <path d="M150 320Q500 -10 850 320Q500 650 150 320Z" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="2 6" opacity=".9"/>
         <path d="M384 568C384 670 616 670 616 568" fill="none" stroke="#2A9AB3" stroke-opacity=".45" stroke-width="22" stroke-linecap="round"/>
-        <g clip-path="url(#mouth)" pointer-events="none"><rect class="sweep" x="-70" y="0" width="70" height="680" fill="url(#sweepG)"/></g>
-        <g id="bag-items"></g>
       </svg>
+      <svg class="bag-sweep" viewBox="0 0 1000 680" aria-hidden="true" focusable="false"><g clip-path="url(#mouth)"><rect class="sweep" x="-70" y="0" width="70" height="680" fill="url(#sweepG)"/></g></svg>
+      <div class="bag-items" id="bag-items"></div>
+      </div>
       <div class="bag-tools">
         <span class="mono" id="bag-hint">Drag the objects around · click one to open it</span>
         <button class="tidy" type="button" id="tidy" hidden>Put everything back</button>
@@ -583,47 +584,44 @@ const ITEMS=[ // x,y = centre in the bag's 1000x640 drawing; s = size; r = tilt
   {kind:"cat",color:"xvio",x:792,y:322,s:84,r:0,label:"The cat",href:"#cat"},
   {kind:"doc",color:"xmag",x:562,y:388,s:88,r:-10,label:"Resume",href:"#resume"}
 ];
-document.getElementById("bag-items").innerHTML=ITEMS.map(it=>{
-  const h=it.s/2, w=Math.round(it.label.length*7.4+14);
-  return `<a class="item" href="${it.href}" aria-label="${esc(it.label)}">
-    <g class="pos" transform="translate(${it.x-h} ${it.y-h})">
-      <g class="lift"><g transform="rotate(${it.r} ${h} ${h})"><svg width="${it.s}" height="${it.s}" viewBox="0 0 120 120" overflow="visible">${OBJ[it.kind](it.color)}</svg></g></g>
-      <g class="scan" aria-hidden="true">
-        <rect class="box" x="-8" y="-8" width="${it.s+16}" height="${it.s+16}"/>
-        <rect class="tab" x="-8" y="-27" width="${w}" height="19"/>
-        <text x="-1" y="-13">${esc(it.label.toUpperCase())}</text>
-      </g>
-    </g></a>`;}).join("");
+const BW=1000, BH=680; // bag drawing units
+document.getElementById("bag-items").innerHTML=ITEMS.map(it=>`
+  <a class="item" href="${it.href}" aria-label="${esc(it.label)}" style="width:${it.s/BW*100}%">
+    <span class="lift" style="--r:${it.r}deg"><svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">${OBJ[it.kind](it.color)}</svg></span>
+    <span class="scan" aria-hidden="true"><span class="tag">${esc(it.label.toUpperCase())}</span></span>
+  </a>`).join("");
 
-/* drag the objects around the page; a short click still opens the link */
+/* drag the objects around the page; a short click still opens the link.
+   Items are separate GPU layers, so dragging only moves a layer instead of repainting the bag. */
 (function bagDrag(){
-  const svgEl=document.querySelector(".bag"), links=[...document.querySelectorAll("#bag-items .item")];
+  const wrap=document.getElementById("bag-wrap"), links=[...document.querySelectorAll("#bag-items .item")];
   const hint=document.getElementById("bag-hint"), tidy=document.getElementById("tidy");
   const KEY="bag-positions-v1", home=ITEMS.map(it=>({x:it.x,y:it.y}));
-  let pos=home.map(p=>({...p}));
+  let pos=home.map(p=>({...p})), zTop=1;
   try{const saved=JSON.parse(localStorage.getItem(KEY)||"null"); if(Array.isArray(saved)&&saved.length===ITEMS.length) pos=saved;}catch(e){}
-  const place=i=>{const h=ITEMS[i].s/2; links[i].querySelector(".pos").setAttribute("transform",`translate(${pos[i].x-h} ${pos[i].y-h})`);};
+  const place=i=>{links[i].style.left=(pos[i].x/BW*100)+"%"; links[i].style.top=(pos[i].y/BH*100)+"%";};
   const moved=()=>pos.some((p,i)=>Math.abs(p.x-home[i].x)>1||Math.abs(p.y-home[i].y)>1);
   const sync=()=>{const m=moved(); tidy.hidden=!m; hint.hidden=m;};
   const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(pos));}catch(e){}};
-  const toSvg=e=>new DOMPoint(e.clientX,e.clientY).matrixTransform(svgEl.getScreenCTM().inverse());
   pos.forEach((_,i)=>place(i)); sync();
-  let d=null;
+  let d=null, frame=0;
   links.forEach((a,i)=>{
     a.addEventListener("dragstart",e=>e.preventDefault());
     a.addEventListener("pointerdown",e=>{
       if(e.button!==0) return;
-      const p=toSvg(e); d={i,sx:p.x,sy:p.y,ox:pos[i].x,oy:pos[i].y,on:false};
-      if(a.nextSibling) a.parentNode.appendChild(a); // bring to front before capturing; moving it later drops the capture
+      const r=wrap.getBoundingClientRect();
+      d={i,r,sx:e.clientX,sy:e.clientY,ox:pos[i].x,oy:pos[i].y,on:false,cx:e.clientX,cy:e.clientY};
+      a.style.zIndex=++zTop;
       a.setPointerCapture(e.pointerId);
     });
     a.addEventListener("pointermove",e=>{
       if(!d||d.i!==i) return;
-      const p=toSvg(e), dx=p.x-d.sx, dy=p.y-d.sy;
-      if(!d.on){ if(Math.hypot(dx,dy)<6) return; d.on=true; a.classList.add("dragging"); }
-      pos[i]={x:Math.round(d.ox+dx),y:Math.round(d.oy+dy)}; place(i);
+      d.cx=e.clientX; d.cy=e.clientY;
+      if(!d.on){ if(Math.hypot(d.cx-d.sx,d.cy-d.sy)<6) return; d.on=true; a.classList.add("dragging"); }
+      if(!frame) frame=requestAnimationFrame(()=>{ frame=0; if(!d) return;
+        pos[i]={x:Math.round(d.ox+(d.cx-d.sx)/d.r.width*BW), y:Math.round(d.oy+(d.cy-d.sy)/d.r.height*BH)}; place(i); });
     });
-    const end=()=>{ if(!d||d.i!==i) return; if(d.on){ a._dragEnd=performance.now(); save(); sync(); } a.classList.remove("dragging"); d=null; };
+    const end=()=>{ if(!d||d.i!==i) return; if(d.on){ a._dragEnd=performance.now(); pos[i]={x:Math.round(d.ox+(d.cx-d.sx)/d.r.width*BW), y:Math.round(d.oy+(d.cy-d.sy)/d.r.height*BH)}; place(i); save(); sync(); } a.classList.remove("dragging"); d=null; };
     a.addEventListener("pointerup",end); a.addEventListener("pointercancel",end); a.addEventListener("lostpointercapture",end);
     a.addEventListener("click",e=>{ if(a._dragEnd&&performance.now()-a._dragEnd<400){ e.preventDefault(); a._dragEnd=0; } });
   });
@@ -762,24 +760,32 @@ function route(){
   });
   if(anchor){ requestAnimationFrame(()=>document.getElementById(anchor)?.scrollIntoView({block:"start"})); }
   else window.scrollTo({top:0,behavior:"instant"});
-  bindCat();
+  bindCat(); refreshMotion(); fluidKick();
 }
 addEventListener("hashchange",route);
 
-/* ---------- pointer: parallax + cat eyes ---------- */
+/* ---------- pointer: parallax + cat eyes ----------
+   Only the elements in the visible view are touched, and the loop stops once they settle. */
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
-let px=innerWidth/2, py=innerHeight/2, raf=0;
-addEventListener("pointermove",e=>{px=e.clientX;py=e.clientY;if(!raf)raf=requestAnimationFrame(tick)},{passive:true});
+let px=innerWidth/2, py=innerHeight/2, cx=0, cy=0, loop=0, parEls=[], eyes=[], fluidKick=()=>{};
+function refreshMotion(){
+  parEls=[...document.querySelectorAll(".view.on .par")].map(el=>[el,parseFloat(el.style.getPropertyValue("--d"))||16]);
+  eyes=[...document.querySelectorAll(".view.on .cat-eyes")];
+  wake();
+}
+function wake(){ if(!loop&&!reduce) loop=requestAnimationFrame(tick); }
+addEventListener("pointermove",e=>{px=e.clientX;py=e.clientY;wake();},{passive:true});
 function tick(){
-  raf=0; if(reduce) return;
-  const r=document.documentElement.style;
-  r.setProperty("--mx",(px/innerWidth-.5).toFixed(3));
-  r.setProperty("--my",(py/innerHeight-.5).toFixed(3));
-  document.querySelectorAll(".view.on .cat-eyes").forEach(g=>{
-    const b=g.ownerSVGElement.getBoundingClientRect(); if(!b.width) return;
-    const dx=px-(b.left+b.width/2), dy=py-(b.top+b.height*.38), d=Math.hypot(dx,dy)||1, m=Math.min(3,d/60);
-    g.setAttribute("transform",`translate(${(dx/d*m).toFixed(2)} ${(dy/d*m*.8).toFixed(2)})`);
-  });
+  loop=0;
+  const tx=px/innerWidth-.5, ty=py/innerHeight-.5;
+  cx+=(tx-cx)*.08; cy+=(ty-cy)*.08;
+  for(const [el,d] of parEls) el.style.translate=`${(cx*d).toFixed(1)}px ${(cy*d).toFixed(1)}px`;
+  for(const g of eyes){
+    const b=g.ownerSVGElement.getBoundingClientRect(); if(!b.width) continue;
+    const dx=px-(b.left+b.width/2), dy=py-(b.top+b.height*.38), dd=Math.hypot(dx,dy)||1, m=Math.min(3,dd/60);
+    g.setAttribute("transform",`translate(${(dx/dd*m).toFixed(1)} ${(dy/dd*m*.8).toFixed(1)})`);
+  }
+  if(Math.abs(tx-cx)+Math.abs(ty-cy)>.002) loop=requestAnimationFrame(tick);
 }
 const MEOWS=["mrrp.","purr…","mew?","…lunch?","prrrt!"];let mi=0;
 function bindCat(){
@@ -793,7 +799,6 @@ function bindCat(){
 /* small nostalgic detail: a desktop-style clock in the footer */
 function clock(){const d=new Date();document.getElementById("clock").textContent=d.toLocaleDateString(undefined,{weekday:"short"}).toUpperCase()+" "+d.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});}
 clock(); setInterval(clock,30000);
-route();
 
 /* ---------- fluid background: domain-warped noise, slowly flowing pigment ---------- */
 (function fluid(){
@@ -806,7 +811,7 @@ route();
   float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
   float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
     return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
-  float fbm(vec2 p){float v=0.,a=.5;mat2 r=mat2(.8,.6,-.6,.8);for(int i=0;i<5;i++){v+=a*n(p);p=r*p*2.02+3.1;a*=.5;}return v;}
+  float fbm(vec2 p){float v=0.,a=.5;mat2 r=mat2(.8,.6,-.6,.8);for(int i=0;i<4;i++){v+=a*n(p);p=r*p*2.02+3.1;a*=.5;}return v;}
   void main(){
     vec2 uv=gl_FragCoord.xy/R; vec2 p=uv*vec2(R.x/R.y,1.)*1.6;
     float t=T*.045;
@@ -842,22 +847,32 @@ route();
   gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
   const loc=gl.getAttribLocation(pr,"p");gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
   const U={R:gl.getUniformLocation(pr,"R"),T:gl.getUniformLocation(pr,"T"),M:gl.getUniformLocation(pr,"M"),D:gl.getUniformLocation(pr,"D")};
-  const SCALE=.35; // rendered small and stretched: the upscale itself adds softness
+  const SCALE=.2; // rendered small and stretched by the browser: soft, and cheap to draw
   function size(){cv.width=Math.max(2,Math.round(innerWidth*SCALE));cv.height=Math.max(2,Math.round(innerHeight*SCALE));gl.viewport(0,0,cv.width,cv.height);}
   size(); addEventListener("resize",size);
-  cv.style.setProperty("--fluid-blur","14px");
-  let dk=0,mx=.5,my=.5;
+  let mx=.5,my=.5,running=false,last=0;
   const t0=performance.now();
+  const wanted=()=>!document.hidden&&document.body.dataset.view!=="home";
   function draw(now){
-    mx+=((px/innerWidth)-mx)*.02; my+=((1-py/innerHeight)-my)*.02;
+    if(!wanted()){ running=false; return; }
+    if(!reduce){ requestAnimationFrame(draw); if(now-last<33) return; } // ~30fps is plenty for a slow drift
+    last=now;
+    mx+=((px/innerWidth)-mx)*.05; my+=((1-py/innerHeight)-my)*.05;
     gl.uniform2f(U.R,cv.width,cv.height);gl.uniform1f(U.T,(now-t0)/1000+20);
-    gl.uniform2f(U.M,mx,my);gl.uniform1f(U.D,dk);
+    gl.uniform2f(U.M,mx,my);
     gl.drawArrays(gl.TRIANGLES,0,3);
-    if(!reduce&&!document.hidden) requestAnimationFrame(draw);
   }
-  requestAnimationFrame(draw);
-  document.addEventListener("visibilitychange",()=>{if(!document.hidden&&!reduce)requestAnimationFrame(draw);});
+  function start(){
+    if(!wanted()||running) return;
+    if(reduce){ draw(performance.now()+1e4); running=false; return; } // one still frame
+    running=true; requestAnimationFrame(draw);
+  }
+  fluidKick=start;
+  document.addEventListener("visibilitychange",start);
+  addEventListener("resize",()=>{ if(reduce) start(); });
+  start();
 })();
+route();
 </script>
 
 </body>
